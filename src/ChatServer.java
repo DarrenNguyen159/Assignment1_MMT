@@ -16,6 +16,7 @@ public class ChatServer {
 	
 	
 	public static void RunServer() {
+		System.out.println("ChatServer is listening");
 		try {
 			//Run Server
 			severSocket = new ServerSocket(port);
