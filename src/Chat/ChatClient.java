@@ -1,6 +1,7 @@
 package Chat;
 import java.net.InetAddress;
 import java.util.List;
+import java.util.Vector;
 
 public class ChatClient {
 	private InetAddress ipAddr;	//Dia chi IP chua Client
@@ -13,6 +14,7 @@ public class ChatClient {
 		this.name = userName;
 		this.ipAddr = IP;
 		//Client moi dang nhap nen ko co port nao dc su dung
+		Ports = new Vector<Integer> ();
 	}
 	
 	//get methods

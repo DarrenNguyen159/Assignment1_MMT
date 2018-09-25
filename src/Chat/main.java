@@ -117,9 +117,30 @@ public class main {
 					
 				}
 				finally {
+					int port = 9000;
 					ChatClient newClient = new ChatClient(inputName, ip);
-					//Add to client list
-					//ChatServer.clientList.add(newClient);
+					//Send Request
+					try {
+						byte[] ipAdr = new byte[] {127, 0, 0, 1};
+						InetAddress address = InetAddress.getByAddress(ipAdr);
+						Socket socket = new Socket(address, port);
+						
+						//get client ip address
+						String clientIP = InetAddress.getLocalHost().getHostAddress();
+						
+	            		System.out.println("Client wanna connect to Server: " + socket.getRemoteSocketAddress());
+						OutputStream os = socket.getOutputStream();
+	                	OutputStreamWriter osw = new OutputStreamWriter(os);
+	                	BufferedWriter bw = new BufferedWriter(osw);
+	                	bw.write("REQ ");
+	                	bw.write(clientIP + " ");
+	                	bw.write(userNameBox.getText() + "\n");
+		                bw.flush();
+					}
+					catch (Exception ex){
+						
+					}
+					
 					//Open new window
 					OnlineList ol = new OnlineList(inputName);
 					ol.setVisible(true);
@@ -128,6 +149,8 @@ public class main {
 				
 			}
 		});
+		
+		
 		GridBagConstraints gbc_btnConnect = new GridBagConstraints();
 		gbc_btnConnect.insets = new Insets(0, 0, 5, 0);
 		gbc_btnConnect.gridx = 1;

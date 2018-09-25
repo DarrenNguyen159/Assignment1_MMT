@@ -1,5 +1,6 @@
 package Chat;
 import java.util.List;
+import java.util.Vector;
 
 import java.io.BufferedReader;
 import java.io.InputStream;
@@ -8,18 +9,20 @@ import java.net.*;
 
 public class ChatServer {
 	private static Socket socket;
-	public static int port = 9000;
-	public static List<ChatClient> clientList;
+	public final static int PORT = 9000;
+	public static List<ChatClient> clientList = new Vector<ChatClient>();;
 	
-	public void main(String[] args) {
+	public static void main(String[] args) {
 		ListenToRequest();
 	}
 	
+
+	
 	///Methods
-	private void ListenToRequest() {
+	private static void ListenToRequest() {
 		try {
-			System.out.println("Server listen on port " + port);
-			ServerSocket serverSocket = new ServerSocket(port);
+			System.out.println("Server listen on port " + PORT);
+			ServerSocket serverSocket = new ServerSocket(PORT);
 			System.out.println("Server's IP :"+InetAddress.getLocalHost().getHostAddress());
 			 
 			while (true) {
@@ -29,8 +32,9 @@ public class ChatServer {
 				InputStream is = socket.getInputStream();
 	            InputStreamReader isr = new InputStreamReader(is);
 	            BufferedReader br = new BufferedReader(isr);
-	            String userName = br.readLine();
-	            System.out.println("Client's Name : " + userName);
+	            System.out.println("Client sent: ");
+	            String line = br.readLine();
+	            System.out.println(line + "\n");
 			}
 		}
 		 

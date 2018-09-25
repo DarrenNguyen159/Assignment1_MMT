@@ -81,10 +81,10 @@ public class OnlineList extends JFrame {
 
 		table = new JTable();
 		panel.add(table);
-		//updateTable(table);
+		//updateTable();
 	}
 	
-	private void updateTable(JTable t) {
+	private void updateTable() {
 		DefaultTableModel model = new DefaultTableModel();
 		for (ChatClient cc : ChatServer.clientList) {//duyet danh sach online trong server
 			Object[] row = new Object[1];
