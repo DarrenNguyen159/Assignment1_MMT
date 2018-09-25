@@ -87,7 +87,7 @@ public class main {
 		JButton btnConnect = new JButton("Connect");
 		btnConnect.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				int port = 9000;
+				/*int port = 9000;
 				try {
 					byte[] ipAdr = new byte[] {127, 0, 0, 1};
 					InetAddress address = InetAddress.getByAddress(ipAdr);
@@ -104,7 +104,22 @@ public class main {
 				}
 				catch (Exception ex){
 					
+				}*/
+				
+				//Client yeu cau dang nhap bang ten, tao 1 ChatClient moi voi name = text go vao userNameBox, ip = ip cua Client
+				String inputName = userNameBox.getText();
+				InetAddress ip = null;
+				try {
+					byte[] ipAddr = InetAddress.getLocalHost().getAddress();
+					ip = InetAddress.getByAddress(ipAddr);
 				}
+				catch (Exception e) {
+					
+				}
+				finally {
+					ChatClient newClient = new ChatClient(inputName, ip);
+				}
+				
 			}
 		});
 		GridBagConstraints gbc_btnConnect = new GridBagConstraints();

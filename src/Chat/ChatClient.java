@@ -4,8 +4,8 @@ import java.util.List;
 
 public class ChatClient {
 	private InetAddress ipAddr;	//Dia chi IP chua Client
-	String name;	//Ten dang nhap cua Client
-	List<Integer> Ports;	//Cac cong cua Client
+	private String name;	//Ten dang nhap cua Client
+	private List<Integer> Ports;	//Cac cong cua Client
 	
 	///Methods
 	//Constructor
@@ -15,7 +15,15 @@ public class ChatClient {
 		//Client moi dang nhap nen ko co port nao dc su dung
 	}
 	
-	//
+	//get methods
+	public String getName() {
+		return name;
+	}
+	public InetAddress ipAddr() {
+		return ipAddr;
+	}
+	
+	
 	
 	
 }

@@ -1,4 +1,5 @@
 package Chat;
+import java.util.List;
 
 import java.io.BufferedReader;
 import java.io.InputStream;
@@ -8,12 +9,13 @@ import java.net.*;
 public class ChatServer {
 	private static Socket socket;
 	public static int port = 9000;
+	private static List<ChatClient> clientList;
 	
 	public void main(String[] args) {
 		ListenToRequest();
 	}
 	
-	//Methods
+	///Methods
 	private void ListenToRequest() {
 		try {
 			System.out.println("Server listen on port " + port);
@@ -45,4 +47,13 @@ public class ChatServer {
 			}
 		}
 	}
+	
+	//Them vao danh sach Client
+	public static void AddClient(ChatClient client) {
+		clientList.add(client);
+	}
+	
+	//
+	
+	
 }
