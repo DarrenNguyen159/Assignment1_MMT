@@ -9,7 +9,7 @@ import java.net.*;
 public class ChatServer {
 	private static Socket socket;
 	public static int port = 9000;
-	private static List<ChatClient> clientList;
+	public static List<ChatClient> clientList;
 	
 	public void main(String[] args) {
 		ListenToRequest();

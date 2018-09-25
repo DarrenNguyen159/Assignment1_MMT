@@ -118,6 +118,12 @@ public class main {
 				}
 				finally {
 					ChatClient newClient = new ChatClient(inputName, ip);
+					//Add to client list
+					//ChatServer.clientList.add(newClient);
+					//Open new window
+					OnlineList ol = new OnlineList(inputName);
+					ol.setVisible(true);
+					ol.setTitle("Online List");
 				}
 				
 			}
@@ -129,5 +135,6 @@ public class main {
 		frame.getContentPane().add(btnConnect, gbc_btnConnect);
 		
 	}
-
+	
+	
 }
