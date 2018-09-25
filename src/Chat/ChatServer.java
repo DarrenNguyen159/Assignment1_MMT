@@ -35,6 +35,12 @@ public class ChatServer {
 	            System.out.println("Client sent: ");
 	            String line = br.readLine();
 	            System.out.println(line + "\n");
+	            
+	            String[] splited = line.split(" ");	            
+	            
+	            if (splited[0].equals("REQ")) {
+		            System.out.println("This is a access request from user " + splited[2] + " with ip: " + splited[1]);
+	            }
 			}
 		}
 		 
