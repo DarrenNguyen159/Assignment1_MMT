@@ -3,8 +3,11 @@ import java.util.List;
 import java.util.Vector;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.net.*;
 
 public class ChatServer {
@@ -36,10 +39,32 @@ public class ChatServer {
 	            String line = br.readLine();
 	            System.out.println(line + "\n");
 	            
-	            String[] splited = line.split(" ");	            
+	            String[] splitedIPName = line.split(" ");	            
 	            
-	            if (splited[0].equals("REQ")) {
-		            System.out.println("This is a access request from user " + splited[2] + " with ip: " + splited[1]);
+	            if (splitedIPName[0].equals("REQ")) {
+		            System.out.println("This is a access request from user " + splitedIPName[2] + " with ip: " + splitedIPName[1]);
+		            String name = splitedIPName[2];
+		            String IP = splitedIPName[1];
+		            InetAddress ipAdrr = InetAddress.getByName(IP);
+		            ChatClient newClient = new ChatClient(name,ipAdrr);
+		            AddClient(newClient);
+		            
+		            //tra ve danh sach online
+		            OutputStream os = socket.getOutputStream();
+					OutputStreamWriter osw = new OutputStreamWriter(os);
+					BufferedWriter bw = new BufferedWriter(osw);
+					//gui so luong user dang online
+					//bw.write(ChatServer.clientList.size() + "\n");
+					
+					//tao 1 danh sach cac usernames
+					for (ChatClient cc : ChatServer.clientList) {//duyet danh sach client
+						//sendText += cc.getName() + " ";
+						System.out.println(cc.getName());
+						bw.write(cc.getName() + " ");
+					}
+					bw.write("\n");
+					bw.flush();
+		            
 	            }
 			}
 		}

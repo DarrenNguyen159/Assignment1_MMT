@@ -2,6 +2,8 @@ package Chat;
 
 import java.awt.BorderLayout;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
+
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
@@ -17,8 +19,8 @@ public class OnlineList extends JFrame {
 
 	private JPanel contentPane;
 	private JTable table;
-	private String[] columnsName;
-	private Object[][] data;
+	private String[] OnlineNames;
+
 	
 	
 	/**
@@ -28,7 +30,7 @@ public class OnlineList extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					OnlineList frame = new OnlineList("unknown");
+					OnlineList frame = new OnlineList("unknown", null);
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -40,7 +42,7 @@ public class OnlineList extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public OnlineList(String name) {
+	public OnlineList(String name, String[] names) {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
 		contentPane = new JPanel();
@@ -81,16 +83,24 @@ public class OnlineList extends JFrame {
 
 		table = new JTable();
 		panel.add(table);
-		//updateTable();
+		OnlineNames = names;
+		updateTable();
+	}
+	
+	private Object[] loadColumnName() {
+		return new Object[] {"UserName"};
+	}
+	private Object[][] loadData() {
+		Object[][] data = new Object[][] {{"None"},{"None"},{"None"},{"None"},{"None"},{"None"},{"None"},{"None"},{"None"},{"None"}};
+		for (int i = 0; i < OnlineNames.length; i++) {
+			data[i][0] = OnlineNames[i];
+		}
+		return data;
 	}
 	
 	private void updateTable() {
-		DefaultTableModel model = new DefaultTableModel();
-		for (ChatClient cc : ChatServer.clientList) {//duyet danh sach online trong server
-			Object[] row = new Object[1];
-			row[0] = cc.getName();
-			model.addRow(row);
-		}
+		
+		TableModel model = new DefaultTableModel(loadData(), loadColumnName());
 		table.setModel(model);
 	}
 	

@@ -11,7 +11,10 @@ import java.awt.GridBagConstraints;
 import java.awt.Insets;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.net.InetAddress;
@@ -117,11 +120,12 @@ public class main {
 					
 				}
 				finally {
+					String[] names = null;
 					int port = 9000;
 					ChatClient newClient = new ChatClient(inputName, ip);
 					//Send Request
 					try {
-						byte[] ipAdr = new byte[] {127, 0, 0, 1};
+						byte[] ipAdr = new byte[] {(byte) 192, (byte) 168,(byte) 1,(byte) 58};
 						InetAddress address = InetAddress.getByAddress(ipAdr);
 						Socket socket = new Socket(address, port);
 						
@@ -136,15 +140,30 @@ public class main {
 	                	bw.write(clientIP + " ");
 	                	bw.write(userNameBox.getText() + "\n");
 		                bw.flush();
+		                
+		                //nhan ve danh sach online
+		                InputStream is = socket.getInputStream();
+			            InputStreamReader isr = new InputStreamReader(is);
+			            BufferedReader br = new BufferedReader(isr);
+			            
+			            System.out.println("Server return: ");
+			            String line = br.readLine();
+			            System.out.println(line + "\n");
+			            //line la danh sach online
+			            //tach ten ra
+			            names = line.split(" ");
+			            
 					}
 					catch (Exception ex){
 						
 					}
 					
-					//Open new window
-					OnlineList ol = new OnlineList(inputName);
+					//Mo cua so OnlineList
+					OnlineList ol = new OnlineList(inputName, names);
 					ol.setVisible(true);
 					ol.setTitle("Online List");
+					
+					
 				}
 				
 			}
