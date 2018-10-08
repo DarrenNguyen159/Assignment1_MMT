@@ -19,6 +19,7 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.net.InetAddress;
 import java.net.Socket;
+import java.util.Arrays;
 import java.awt.event.ActionEvent;
 import javax.swing.JTextField;
 import javax.swing.JList;
@@ -125,8 +126,10 @@ public class main {
 					ChatClient newClient = new ChatClient(inputName, ip);
 					//Send Request
 					try {
-						byte[] ipAdr = new byte[] {(byte) 192, (byte) 168,(byte) 1,(byte) 58};
-						InetAddress address = InetAddress.getByAddress(ipAdr);
+						//byte[] ipAdr = new byte[] {(byte) 192, (byte) 168,(byte) 1,(byte) 58};
+						//InetAddress address = InetAddress.getByAddress(ipAdr);
+						//Ket noi den ChatServer
+						InetAddress address = InetAddress.getByName("127.0.0.1");
 						Socket socket = new Socket(address, port);
 						
 						//get client ip address
@@ -136,7 +139,7 @@ public class main {
 						OutputStream os = socket.getOutputStream();
 	                	OutputStreamWriter osw = new OutputStreamWriter(os);
 	                	BufferedWriter bw = new BufferedWriter(osw);
-	                	bw.write("REQ ");
+	                	bw.write("REQ JOIN ");
 	                	bw.write(clientIP + " ");
 	                	bw.write(userNameBox.getText() + "\n");
 		                bw.flush();
@@ -152,6 +155,7 @@ public class main {
 			            //line la danh sach online
 			            //tach ten ra
 			            names = line.split(" ");
+			            names = Arrays.copyOfRange(names, 3, names.length);//bo REQ JOIN OK
 			            
 					}
 					catch (Exception ex){
@@ -177,6 +181,6 @@ public class main {
 		frame.getContentPane().add(btnConnect, gbc_btnConnect);
 		
 	}
-	
+
 	
 }

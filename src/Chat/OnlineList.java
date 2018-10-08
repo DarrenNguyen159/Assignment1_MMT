@@ -14,12 +14,25 @@ import javax.swing.JLabel;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
 import javax.swing.JTable;
+import javax.swing.JButton;
+import java.awt.event.ActionListener;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.net.InetAddress;
+import java.net.ServerSocket;
+import java.net.Socket;
+import java.awt.event.ActionEvent;
 
 public class OnlineList extends JFrame {
 
 	private JPanel contentPane;
 	private JTable table;
 	private String[] OnlineNames;
+	int port = 9000;
 
 	
 	
@@ -70,6 +83,71 @@ public class OnlineList extends JFrame {
 		gbc_clientName.gridx = 1;
 		gbc_clientName.gridy = 0;
 		contentPane.add(clientName, gbc_clientName);
+		
+		JButton connectBTN = new JButton("Connect");
+		connectBTN.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				/* Su kien khi bam nut Connect 			*/
+				int rowIndex = table.getSelectedRow();
+				int colIndex = table.getSelectedColumn();
+				Object selected = table.getValueAt(rowIndex, colIndex);
+				String selectedName = selected.toString();
+				//DEBUG:	System.out.println(selectedName);
+				
+				//gui cho server name cua user muon chat
+				try {
+					InetAddress ip = null;
+					byte[] ipAddr = InetAddress.getLocalHost().getAddress();
+					ip = InetAddress.getByAddress(ipAddr);
+					
+					//Ket noi den ChatServer
+					InetAddress address = InetAddress.getByName("127.0.0.1");
+					Socket socket = new Socket(address, port);
+					OutputStream os = socket.getOutputStream();
+                	OutputStreamWriter osw = new OutputStreamWriter(os);
+                	BufferedWriter bw = new BufferedWriter(osw);
+                	
+                	bw.write("REQ CHAT ");
+                	//ten cua client muon chat(B)
+                	bw.write(selectedName + " ");
+                	//ip cua may A
+                	bw.write(ip.getHostAddress());
+                	bw.write("\n");
+                	bw.flush();
+                	
+                	//Nhan thong bao tu Server
+                	ServerSocket serverSocket = new ServerSocket(9001);
+                	System.out.println("Waiting on port 9001\n");
+                	Socket socketListener = null;
+		            while (true) {
+		            	try {
+		            		socketListener = serverSocket.accept();
+		            		InputStream is = socketListener.getInputStream();
+		    	            InputStreamReader isr = new InputStreamReader(is);
+		    	            BufferedReader br = new BufferedReader(isr);
+		    	            
+		    	            System.out.println("ChatServer sent: ");
+		    	            String line = br.readLine();
+		    	            System.out.println(line + "\n");
+		            	}
+		            	catch (Exception ex) {
+		            		
+		            	}
+		            }
+		            
+					
+				}
+				catch (Exception ex) {
+					
+				}
+			}
+		});
+		GridBagConstraints gbc_connectBTN = new GridBagConstraints();
+		gbc_connectBTN.anchor = GridBagConstraints.NORTH;
+		gbc_connectBTN.insets = new Insets(0, 0, 5, 5);
+		gbc_connectBTN.gridx = 0;
+		gbc_connectBTN.gridy = 1;
+		contentPane.add(connectBTN, gbc_connectBTN);
 		
 		JPanel panel = new JPanel();
 		GridBagConstraints gbc_panel = new GridBagConstraints();
