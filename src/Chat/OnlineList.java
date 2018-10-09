@@ -91,7 +91,7 @@ public class OnlineList extends JFrame {
 				int rowIndex = table.getSelectedRow();
 				int colIndex = table.getSelectedColumn();
 				Object selected = table.getValueAt(rowIndex, colIndex);
-				String selectedName = selected.toString();
+				String selectedNameB = selected.toString();
 				//DEBUG:	System.out.println(selectedName);
 				
 				//gui cho server name cua user muon chat
@@ -109,32 +109,57 @@ public class OnlineList extends JFrame {
                 	
                 	bw.write("REQ CHAT ");
                 	//ten cua client muon chat(B)
-                	bw.write(selectedName + " ");
+                	bw.write(selectedNameB + " ");
                 	//ip cua may A
                 	bw.write(ip.getHostAddress());
+                	bw.write(" ");
+                	bw.write(name);
                 	bw.write("\n");
                 	bw.flush();
-                	
-                	//Nhan thong bao tu Server
-                	ServerSocket serverSocket = new ServerSocket(9001);
-                	System.out.println("Waiting on port 9001\n");
-                	Socket socketListener = null;
-		            while (true) {
-		            	try {
-		            		socketListener = serverSocket.accept();
-		            		InputStream is = socketListener.getInputStream();
-		    	            InputStreamReader isr = new InputStreamReader(is);
-		    	            BufferedReader br = new BufferedReader(isr);
-		    	            
-		    	            System.out.println("ChatServer sent: ");
-		    	            String line = br.readLine();
-		    	            System.out.println(line + "\n");
-		            	}
-		            	catch (Exception ex) {
-		            		
-		            	}
-		            }
 		            
+                	//doi phan hoi tu ChatServer
+            		try {
+            			//nhan thong bao tu ChatServer
+                    	ServerSocket serverSocket = new ServerSocket(9005);
+                    	System.out.println("Waiting on port 9005\n");
+                    	Socket socketListener = null;
+                        while (true) {
+                        	try {
+                        		socketListener = serverSocket.accept();
+                        		InputStream is = socketListener.getInputStream();
+                	            InputStreamReader isr = new InputStreamReader(is);
+                	            BufferedReader br = new BufferedReader(isr);
+                	            
+                	            System.out.println("ChatServer sent: ");
+                	            String line = br.readLine();
+                	            System.out.println(line + "\n");
+                	            String[] splited = line.split(" ");
+                	            if (splited[0].equals("INFORM")) {
+                	            	if (splited[1].equals("RES")) {
+                	            		if (splited[3].equals("OK")) {
+                	            			//System.out.println("Received " + splited[4]);
+                	            			//tao cua so chat
+                	            			String userKiaName = splited[5];
+                	            			String ipKia = splited[4];
+                	            			ChatBox cb = new ChatBox(userKiaName, ipKia);
+                	            			cb.setVisible(true);
+                	            			cb.setTitle("Chat with " + userKiaName);
+                	            			//dong ket noi voi Server
+                	            			serverSocket.close();
+                	            		}
+                	            		
+                	            	}
+                	            }
+                	            
+                        	}
+                        	catch (Exception ex) {
+                        		
+                        	}
+                        }
+            			}
+            			catch (Exception ex) {
+            				
+            			}
 					
 				}
 				catch (Exception ex) {

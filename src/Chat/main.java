@@ -17,8 +17,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
-import java.net.InetAddress;
-import java.net.Socket;
 import java.util.Arrays;
 import java.awt.event.ActionEvent;
 import javax.swing.JTextField;
@@ -30,7 +28,7 @@ import javax.swing.table.TableColumn;
 public class main {
 
 	private JFrame frame;
-	private JTextField userNameBox;
+	private static JTextField userNameBox;
 	private JList list;
 	private JTable table;
 
@@ -48,6 +46,48 @@ public class main {
 				}
 			}
 		});
+		
+		
+		//cho thong bao dc yeu cau chat tu Server
+		try {
+			//nhan thong bao tu ChatServer
+        	ServerSocket serverSocket = new ServerSocket(9001);
+        	System.out.println("Waiting on port 9001\n");
+        	Socket socketListener = null;
+            while (true) {
+            	try {
+            		socketListener = serverSocket.accept();
+            		InputStream is = socketListener.getInputStream();
+    	            InputStreamReader isr = new InputStreamReader(is);
+    	            BufferedReader br = new BufferedReader(isr);
+    	            
+    	            System.out.println("ChatServer sent: ");
+    	            String line = br.readLine();
+    	            System.out.println(line + "\n");
+    	            String[] splited = line.split(" ");
+    	            if (splited[0].equals("INFORM")) {
+    	            	if (splited[1].equals("REQ")) {
+    	            		String ipAStr = splited[3];
+    	            		String nameA = splited[4];
+    	            		String nameB = userNameBox.getText();
+    	            		
+    	            		//tao cua so thong bao
+    	            		ChatInform ci = new ChatInform(nameA,ipAStr,nameB);
+    	            		ci.setVisible(true);
+    	            		ci.setTitle("Chat request from " + nameA + " with ip: " + ipAStr);
+    	            		
+    	            	}
+    	            }
+    	            
+            	}
+            	catch (Exception ex) {
+            		
+            	}
+            }
+			}
+			catch (Exception ex) {
+				
+			}
 	}
 
 	/**

@@ -74,10 +74,11 @@ public class ChatServer {
 	            //Nhan yeu cau muon chat
 	            if (splited[0].equals("REQ")) {
 	            	if (splited[1].equals("CHAT")) {
-	            		System.out.println("User with ip " + splited[3] + " wanna chat with user: " + splited[2]);
+	            		System.out.println("User " + splited[4] + " with ip " + splited[3] + " wanna chat with user: " + splited[2]);
 	            		//Thong bao cho B yeu cau chat cua A
 	            		String ipAStr = splited[3];
 	            		String name = splited[2];
+	            		String othername = splited[4];
 	            		InetAddress ipb = null;
 	            		//tim name trong ClientList
 	            		for (ChatClient cc : ChatServer.clientList) {
@@ -105,6 +106,8 @@ public class ChatServer {
 							BufferedWriter bw = new BufferedWriter(osw);
 							bw.write("INFORM REQ CHAT ");
 							bw.write(ipAStr);
+							bw.write(" ");
+							bw.write(othername);
 							bw.write("\n");
 							bw.flush();
 	            		}
@@ -112,6 +115,54 @@ public class ChatServer {
 	            			
 	            		}
 	            		
+	            	}
+	            }
+	            
+	            
+	            //nhan tra loi chap nhan chat
+	            if (splited[0].equals("RES")) {
+	            	if (splited[2].equals("OK")) {//chap nhan
+	            		String ipAStr = splited[5];
+	            		String ipBStr = splited[3];
+	            		//gui thong bao cho A
+	            		//Tao ket noi den A
+	            		try {
+	            			InetAddress ipA = InetAddress.getByName(ipAStr);
+	            			String nameB = splited[4];
+	    					Socket socket = new Socket(ipA, 9005);
+	    					OutputStream os = socket.getOutputStream();
+							OutputStreamWriter osw = new OutputStreamWriter(os);
+							BufferedWriter bw = new BufferedWriter(osw);
+							bw.write("INFORM RES CHAT OK ");
+							bw.write(ipBStr);
+							bw.write(" ");
+							bw.write(nameB);
+							bw.write("\n");
+							bw.flush();
+	            		}
+	            		catch (Exception ex) {
+	            			
+	            		}
+	            		
+	            		//gui thong bao cho B
+	            		//Tao ket noi den B
+	            		try {
+	            			InetAddress ipB = InetAddress.getByName(ipBStr);
+	            			String nameA = splited[6];
+	    					Socket socket = new Socket(ipB, 9001);
+	    					OutputStream os = socket.getOutputStream();
+							OutputStreamWriter osw = new OutputStreamWriter(os);
+							BufferedWriter bw = new BufferedWriter(osw);
+							bw.write("INFORM RES CHAT OK ");
+							bw.write(ipAStr);
+							bw.write(" ");
+							bw.write(nameA);
+							bw.write("\n");
+							bw.flush();
+	            		}
+	            		catch (Exception ex) {
+	            			
+	            		}
 	            	}
 	            }
 			}
