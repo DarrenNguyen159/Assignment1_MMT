@@ -65,7 +65,7 @@ public class main {
 	
 	public static void main(String[] args) {
 		cbox = new ChatBox();
-		cbox.setVisible(true);
+		cbox.setVisible(false);
 //		cbox.setTitle("Chat with ");
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
@@ -103,6 +103,7 @@ public class main {
     	            		String nameB = userNameBox.getText();
     	            		
     	            		//tao cua so thong bao
+    	            		System.out.println("DEBUG: " + userNameBox.getText());
     	            		ChatInform ci = new ChatInform(nameA,ipAStr,nameB);
 //    	            		ChatRequestInform ci = new ChatRequestInform(nameA,ipAStr,nameB);
     	            		ci.setVisible(true);
@@ -133,7 +134,6 @@ public class main {
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize() {
-		System.out.println("ThisL: " + this);
 		frame = new JFrame("My Chat App");
 		frame.setBounds(100, 100, 400, 300);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -225,20 +225,29 @@ public class main {
 			            System.out.println("Server return: ");
 			            String line = br.readLine();
 			            System.out.println(line + "\n");
-			            //line la danh sach online
-			            //tach ten ra
-			            names = line.split(" ");
-			            names = Arrays.copyOfRange(names, 3, names.length);//bo REQ JOIN OK
+			            String[] splited = line.split(" ");
+			            if (splited[0].equals("REQ")) {
+			            	if (splited[1].equals("JOIN")) {
+			            		if (splited[2].equals("OK")) {
+			            			//tach ten ra
+						            names = Arrays.copyOfRange(splited, 3, splited.length);//bo REQ JOIN OK
+						            //Mo cua so OnlineList
+									OnlineList ol = new OnlineList(inputName, names, cloneObj);
+									ol.setVisible(true);
+									ol.setTitle("Online List");
+			            		}
+			            		else if (splited[2].equals("DENIED")){
+			            			//bi tu choi
+			            			userNameBox.setText("Denied: Invalid username or taken");
+			            		}
+			            	}
+			            }
+			            
 			            
 					}
 					catch (Exception ex){
 						
 					}
-					
-					//Mo cua so OnlineList
-					OnlineList ol = new OnlineList(inputName, names, cloneObj);
-					ol.setVisible(true);
-					ol.setTitle("Online List");
 					
 					
 				}

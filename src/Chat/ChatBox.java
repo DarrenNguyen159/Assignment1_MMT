@@ -10,6 +10,7 @@ import javax.swing.border.EmptyBorder;
 import java.awt.GridBagLayout;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
@@ -35,6 +36,9 @@ public class ChatBox extends JFrame {
 	public static String ip;
 	public static String portKia;
 	public static String portNay;
+	private JButton btnClose;
+	Socket socket;
+	ChatBox cloneObj = this;
 	/**
 	 * Launch the application.
 	 */
@@ -69,11 +73,9 @@ public class ChatBox extends JFrame {
 		contentPane.add(scrollPane);
 		
 		chatflow = new JTextArea();
-		chatflow.setText("sometexthere");
 		scrollPane.setViewportView(chatflow);
 		
 		sendText = new JTextField();
-		sendText.setText("editable?");
 		sendText.setBounds(25, 213, 269, 20);
 		contentPane.add(sendText);
 		sendText.setColumns(10);
@@ -84,17 +86,24 @@ public class ChatBox extends JFrame {
 				//gui cho user kia tin nhan
 				try {
 					//ket noi den user kia
-					Socket socket = new Socket(ip, Integer.parseInt(portKia));
+					socket = new Socket(ip, Integer.parseInt(portKia));
 					OutputStream os = socket.getOutputStream();
                 	OutputStreamWriter osw = new OutputStreamWriter(os);
                 	BufferedWriter bw = new BufferedWriter(osw);
                 	
                 	String message = sendText.getText();
-                	bw.write("CHAT ");
+                	bw.write("CHAT SEND ");
                 	bw.write(message);
                 	bw.write("\n");
                 	bw.flush();
                 	System.out.println("Sent message to port " + portKia);
+                	//hien thi tin nhan vua go
+                	String currentText = ChatBox.chatflow.getText();
+            		String newText = currentText + "\n";
+            		newText += "Me: ";
+            		//in doan tin nhan
+            		newText += message;
+            		ChatBox.chatflow.setText(newText);
 					
 				}
 				catch (Exception ex) {
@@ -106,12 +115,43 @@ public class ChatBox extends JFrame {
 		contentPane.add(btnSend);
 		
 		this.setTitle("Chat with " + name);
+		chatflow.setEditable(false);
+		
+		btnClose = new JButton("Close");
+		btnClose.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				//ket thuc chat
+				try {
+					//ket noi den user kia
+					socket = new Socket(ip, Integer.parseInt(portKia));
+					OutputStream os = socket.getOutputStream();
+                	OutputStreamWriter osw = new OutputStreamWriter(os);
+                	BufferedWriter bw = new BufferedWriter(osw);
+                	
+                	bw.write("CHAT CLOSE");
+                	bw.write("\n");
+                	bw.flush();
+                	
+                	//dong cua so
+                	closeChatBox(cloneObj);
+				} 
+				catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		});
+		btnClose.setBounds(305, 0, 89, 23);
+		contentPane.add(btnClose);
 	}
 	
 	public static void WaitChat() {
 		
-		Thread wc = new Thread(new WaitChat(Integer.parseInt(portNay)));
+		Thread wc = new Thread(new WaitChat(Integer.parseInt(portNay), name));
 		wc.start();
 		
+	}
+	public void closeChatBox(ChatBox cb) {
+		cb.dispose();
+		chatflow.setText("");
 	}
 }

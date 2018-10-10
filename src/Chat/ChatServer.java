@@ -49,25 +49,45 @@ public class ChatServer {
 		            	String name = splited[3];
 		            	String IP = splited[2];
 		            	InetAddress ipAdrr = InetAddress.getByName(IP);
-		            	ChatClient newClient = new ChatClient(name,ipAdrr);
-		            	AddClient(newClient);
 		            	
-		            	//tra ve danh sach online
-		            	OutputStream os = socket.getOutputStream();
-						OutputStreamWriter osw = new OutputStreamWriter(os);
-						BufferedWriter bw = new BufferedWriter(osw);
-						//gui so luong user dang online
-						//bw.write(ChatServer.clientList.size() + "\n");
-						bw.write("REQ JOIN OK ");
+		            	//kiem tra xem co trung ten ko?
+		            	boolean ok = true;
+		            	for (ChatClient cc: clientList) {
+		            		if (cc.getName().equals(name)) {//trung ten
+		            			ok = false;
+		            			break;
+		            		}
+		            	}
+		            	
+		            	if (ok) {
+			            	ChatClient newClient = new ChatClient(name,ipAdrr);
+			            	AddClient(newClient);
+		            		//tra ve danh sach online
+		            		OutputStream os = socket.getOutputStream();
+							OutputStreamWriter osw = new OutputStreamWriter(os);
+							BufferedWriter bw = new BufferedWriter(osw);
+							//gui so luong user dang online
+							//bw.write(ChatServer.clientList.size() + "\n");
+							bw.write("REQ JOIN OK ");
 						
-						//tao 1 danh sach cac usernames
-						for (ChatClient cc : ChatServer.clientList) {//duyet danh sach client
-							//sendText += cc.getName() + " ";
-							System.out.println(cc.getName());
-							bw.write(cc.getName() + " ");
-						}
-						bw.write("\n");
-						bw.flush();
+							//tao 1 danh sach cac usernames
+							for (ChatClient cc : ChatServer.clientList) {//duyet danh sach client
+								//sendText += cc.getName() + " ";
+								System.out.println(cc.getName());
+								bw.write(cc.getName() + " ");
+							}
+							bw.write("\n");
+							bw.flush();
+		            	}
+		            	else {
+		            		//tu choi gia nhap
+		            		OutputStream os = socket.getOutputStream();
+							OutputStreamWriter osw = new OutputStreamWriter(os);
+							BufferedWriter bw = new BufferedWriter(osw);
+							
+							bw.write("REQ JOIN DENIED\n");
+							bw.flush();
+		            	}
 	            	}
 	            }
 	            
@@ -175,6 +195,30 @@ public class ChatServer {
 	            		catch (Exception ex) {
 	            			
 	            		}
+	            	}
+	            }
+	            
+	            //nhan yeu refresh onlinelist
+	            if (splited[0].equals("REQ")) {
+	            	if (splited[1].equals("REFRESH")) {
+	            		System.out.println("Refresh request from " + socket.getRemoteSocketAddress());
+		            	
+		            	//tra ve danh sach online
+		            	OutputStream os = socket.getOutputStream();
+						OutputStreamWriter osw = new OutputStreamWriter(os);
+						BufferedWriter bw = new BufferedWriter(osw);
+
+						//bw.write(ChatServer.clientList.size() + "\n");
+						bw.write("RES REFRESH ");
+						
+						//tao 1 danh sach cac usernames
+						for (ChatClient cc : ChatServer.clientList) {//duyet danh sach client
+							//sendText += cc.getName() + " ";
+							System.out.println(cc.getName());
+							bw.write(cc.getName() + " ");
+						}
+						bw.write("\n");
+						bw.flush();
 	            	}
 	            }
 			}

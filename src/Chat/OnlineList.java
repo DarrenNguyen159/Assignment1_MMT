@@ -25,12 +25,14 @@ import java.io.OutputStreamWriter;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.Arrays;
 import java.awt.event.ActionEvent;
 
 public class OnlineList extends JFrame {
 
 	private JPanel contentPane;
 	private JTable table;
+	private String username;
 	private String[] OnlineNames;
 	int port = 9000;
 	main m;
@@ -56,7 +58,7 @@ public class OnlineList extends JFrame {
 	 * Create the frame.
 	 */
 	public OnlineList(String name, String[] names, main ma) {
-		System.out.println("MA: " + ma);
+		username = name;
 		this.m = ma;
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
@@ -198,6 +200,48 @@ public class OnlineList extends JFrame {
 		gbc_connectBTN.gridy = 1;
 		contentPane.add(connectBTN, gbc_connectBTN);
 		
+		JButton btnRefresh = new JButton("Refresh");
+		btnRefresh.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				//gui yeu cau refresh online list
+				try {
+					//Ket noi den ChatServer
+					InetAddress address = InetAddress.getByName(main.svip);
+					Socket socket = new Socket(address, 9000);
+
+					OutputStream os = socket.getOutputStream();
+                	OutputStreamWriter osw = new OutputStreamWriter(os);
+                	BufferedWriter bw = new BufferedWriter(osw);
+                	bw.write("REQ REFRESH\n");
+	                bw.flush();
+	                
+	                //nhan ve danh sach online
+	                InputStream is = socket.getInputStream();
+		            InputStreamReader isr = new InputStreamReader(is);
+		            BufferedReader br = new BufferedReader(isr);
+		            
+		            System.out.println("Server return: ");
+		            String line = br.readLine();
+		            System.out.println(line + "\n");
+		            //line la danh sach online
+		            String[] splited = line.split(" ");
+		            String[] names = Arrays.copyOfRange(splited, 2,splited.length);//Bo RES REFRESH
+		            OnlineNames = names;
+		            updateTable();
+		            
+				}
+				catch (Exception ex){
+					
+				}
+				
+			}
+		});
+		GridBagConstraints gbc_btnRefresh = new GridBagConstraints();
+		gbc_btnRefresh.insets = new Insets(0, 0, 5, 0);
+		gbc_btnRefresh.gridx = 1;
+		gbc_btnRefresh.gridy = 1;
+		contentPane.add(btnRefresh, gbc_btnRefresh);
+		
 		JPanel panel = new JPanel();
 		GridBagConstraints gbc_panel = new GridBagConstraints();
 		gbc_panel.anchor = GridBagConstraints.WEST;
@@ -218,9 +262,15 @@ public class OnlineList extends JFrame {
 		return new Object[] {"UserName"};
 	}
 	private Object[][] loadData() {
+		int j = 0;
 		Object[][] data = new Object[][] {{"None"},{"None"},{"None"},{"None"},{"None"},{"None"},{"None"},{"None"},{"None"},{"None"}};
 		for (int i = 0; i < OnlineNames.length; i++) {
-			data[i][0] = OnlineNames[i];
+			if (OnlineNames[i].equals(username)) {
+//				System.out.println("Trung ten: " + username);
+				continue;
+			}
+			data[j][0] = OnlineNames[i];
+			j++;
 		}
 		return data;
 	}

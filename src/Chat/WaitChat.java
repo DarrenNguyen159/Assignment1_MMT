@@ -8,8 +8,10 @@ import java.net.Socket;
 
 public class WaitChat implements Runnable {
 	int portNay;
-	public WaitChat(int port) {
+	String nameKia;
+	public WaitChat(int port, String name) {
 		portNay = port;
+		nameKia = name;
 	}
 	
 	@Override
@@ -31,12 +33,24 @@ public class WaitChat implements Runnable {
 	            	System.out.println(line + "\n");
 	            	String[] splited = line.split(" ");
 	            	if (splited[0].equals("CHAT")) {
-	            		//hien tin nhan len o chat
-	            		String currentText = ChatBox.chatflow.getText();
-	            		String newText = currentText + "\n";
-	            		//in doan tin nhan
-	            		newText += line.substring(5);
-	            		ChatBox.chatflow.setText(newText);
+	            		if (splited[1].equals("SEND")) {
+	            			//hien tin nhan len o chat
+	            			String currentText = ChatBox.chatflow.getText();
+	            			String newText = currentText + "\n";
+	            			//in ten nguoi gui
+	            			newText += nameKia + ": ";
+	            			//in doan tin nhan
+	            			newText += line.substring(9);
+	            			ChatBox.chatflow.setText(newText);
+	            		}
+	            		if (splited[1].equals("CLOSE")) {
+	            			//thong bao nguoi kia roi chat
+	            			String currentText = ChatBox.chatflow.getText();
+	            			String newText = currentText + "\n";
+	            			//in doan tin nhan
+	            			newText += nameKia + " has left.";
+	            			ChatBox.chatflow.setText(newText);
+	            		}
 	            	}
 	            	
         		}
