@@ -33,29 +33,31 @@ public class OnlineList extends JFrame {
 	private JTable table;
 	private String[] OnlineNames;
 	int port = 9000;
-
+	main m;
 	
 	
 	/**
 	 * Launch the application.
 	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					OnlineList frame = new OnlineList("unknown", null);
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
+//	public static void main(String[] args) {
+//		EventQueue.invokeLater(new Runnable() {
+//			public void run() {
+//				try {
+//					OnlineList frame = new OnlineList("unknown", null);
+//					frame.setVisible(true);
+//				} catch (Exception e) {
+//					e.printStackTrace();
+//				}
+//			}
+//		});
+//	}
 
 	/**
 	 * Create the frame.
 	 */
-	public OnlineList(String name, String[] names) {
+	public OnlineList(String name, String[] names, main ma) {
+		System.out.println("MA: " + ma);
+		this.m = ma;
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
 		contentPane = new JPanel();
@@ -141,11 +143,33 @@ public class OnlineList extends JFrame {
                 	            			//tao cua so chat
                 	            			String userKiaName = splited[5];
                 	            			String ipKia = splited[4];
-                	            			ChatBox cb = new ChatBox(userKiaName, ipKia);
-                	            			cb.setVisible(true);
-                	            			cb.setTitle("Chat with " + userKiaName);
+                	            			String portKia = splited[6];
+                	            			String portNay = splited[7];
+                	    					
+//                	            			ma.createChatBox(userKiaName, ipKia);
+//                	            			ma.ShowChatBox(userKiaName);
+                	            			main.cbox.setVisible(true);
+                	            			main.cbox.name = userKiaName;
+                	            			main.cbox.setTitle("Chat with " + main.cbox.name);
+                	            			main.cbox.ip = ipKia;
+                	            			main.cbox.portKia = portKia;
+                	            			main.cbox.portNay = portNay;
+                	            			main.cbox.WaitChat();
+                	            			
+//                	            			main.Show(userKiaName);
+                	            			
+                	            			
+//                	            			ChatBox cb = new ChatBox(userKiaName,ipKia);
+//                	            			System.out.println("JFRAME bg: " + cb.contentPane);
+//                	            			Object obj = cb.contentPane.getComponent(0);
+//                	            			cb.setVisible(true);
+//                	            			m.ShowChatBox();
+//                	    					cb.setTitle("Chat with " + userKiaName);
+                	            			//main.createChatBox(userKiaName, ipKia);
+                	            			
                 	            			//dong ket noi voi Server
                 	            			serverSocket.close();
+                	            			break;
                 	            		}
                 	            		
                 	            	}

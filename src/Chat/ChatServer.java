@@ -31,7 +31,7 @@ public class ChatServer {
 			while (true) {
 				socket = serverSocket.accept();
 				System.out.println("Server connect with ip: " + socket.getRemoteSocketAddress());
-				 
+				
 				InputStream is = socket.getInputStream();
 	            InputStreamReader isr = new InputStreamReader(is);
 	            BufferedReader br = new BufferedReader(isr);
@@ -129,6 +129,8 @@ public class ChatServer {
 	            		try {
 	            			InetAddress ipA = InetAddress.getByName(ipAStr);
 	            			String nameB = splited[4];
+	            			String portB = "9003";
+	            			String portA = "9002";
 	    					Socket socket = new Socket(ipA, 9005);
 	    					OutputStream os = socket.getOutputStream();
 							OutputStreamWriter osw = new OutputStreamWriter(os);
@@ -137,6 +139,10 @@ public class ChatServer {
 							bw.write(ipBStr);
 							bw.write(" ");
 							bw.write(nameB);
+							bw.write(" ");
+							bw.write(portB);
+							bw.write(" ");
+							bw.write(portA);
 							bw.write("\n");
 							bw.flush();
 	            		}
@@ -149,7 +155,9 @@ public class ChatServer {
 	            		try {
 	            			InetAddress ipB = InetAddress.getByName(ipBStr);
 	            			String nameA = splited[6];
-	    					Socket socket = new Socket(ipB, 9001);
+	            			String portA = "9002";
+	            			String portB = "9003";
+	    					Socket socket = new Socket(ipB, 9006);
 	    					OutputStream os = socket.getOutputStream();
 							OutputStreamWriter osw = new OutputStreamWriter(os);
 							BufferedWriter bw = new BufferedWriter(osw);
@@ -157,6 +165,10 @@ public class ChatServer {
 							bw.write(ipAStr);
 							bw.write(" ");
 							bw.write(nameA);
+							bw.write(" ");
+							bw.write(portA);
+							bw.write(" ");
+							bw.write(portB);
 							bw.write("\n");
 							bw.flush();
 	            		}

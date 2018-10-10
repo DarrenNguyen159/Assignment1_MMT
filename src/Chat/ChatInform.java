@@ -26,6 +26,7 @@ import java.awt.event.ActionEvent;
 
 public class ChatInform extends JFrame {
 	private JPanel contentPane;
+	ChatInform cloneObj = this;
 	/**
 	 * Launch the application.
 	 */
@@ -109,8 +110,8 @@ public class ChatInform extends JFrame {
                 	bw.flush();
 		            
                 	//nhan thong bao tu ChatServer
-                	ServerSocket serverSocket = new ServerSocket(9005);
-                	System.out.println("Waiting on port 9005\n");
+                	ServerSocket serverSocket = new ServerSocket(9006);
+                	System.out.println("Waiting on port 9006\n");
                 	Socket socketListener = null;
                     while (true) {
                     	try {
@@ -130,11 +131,23 @@ public class ChatInform extends JFrame {
             	            			//tao cua so chat
             	            			String userKiaName = splited[5];
             	            			String ipKia = splited[4];
-            	            			ChatBox cb = new ChatBox(userKiaName, ipKia);
-            	            			cb.setVisible(true);
-            	            			cb.setTitle("Chat with " + userKiaName);
+            	            			String portKia = splited[6];
+            	            			String portNay = splited[7];
+//            	            			ChatBox cb = new ChatBox(userKiaName, ipKia);
+//            	            			cb.setVisible(true);
+//            	            			cb.setTitle("Chat with " + userKiaName);
+            	            			
+            	            			main.cbox.setVisible(true);
+            	            			main.cbox.name = userKiaName;
+            	            			main.cbox.setTitle("Chat with " + main.cbox.name);
+            	            			main.cbox.ip = ipKia;
+            	            			main.cbox.portKia = portKia;
+            	            			main.cbox.portNay = portNay;
+            	            			main.cbox.WaitChat();
+            	            			
             	            			//dong ket noi voi Server
             	            			serverSocket.close();
+            	            			break;
             	            		}
             	            		
             	            	}
@@ -152,6 +165,10 @@ public class ChatInform extends JFrame {
 				catch (Exception ex) {
 					
 				}
+				
+				//dong server
+				closeDialog(cloneObj);
+			
 			}
 		});
 		GridBagConstraints gbc_btnAccecpt = new GridBagConstraints();
@@ -168,6 +185,10 @@ public class ChatInform extends JFrame {
 		
 		//hien thi ten
 		name.setText(UsernameA);
+	}
+	
+	public void closeDialog(ChatInform ci) {
+		ci.dispose();
 	}
 
 }

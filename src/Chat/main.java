@@ -26,16 +26,44 @@ import javax.swing.table.TableColumn;
 
 
 public class main {
-
+	
+	
 	private JFrame frame;
 	private static JTextField userNameBox;
 	private JList list;
 	private JTable table;
-
+	public static ChatBox cbox;
+	public main cloneObj = this;
+		
 	/**
 	 * Launch the application.
 	 */
+	
+	public static void Show(String name) {
+		if (cbox != null) {
+			cbox.setVisible(true);
+			cbox.setTitle("Chats with " + name);
+		}
+	}
+	
+	public void ShowChatBox(String name) {
+		if (cbox != null) {
+			cbox.setVisible(true);
+			cbox.setTitle("Chats with " + name);
+		}
+//		System.out.println("COBX: " + cbox);
+	}
+	public ChatBox createChatBox(String name, String ip, String portNay, String portKia) {
+		cbox = new ChatBox();
+		cbox.setVisible(false);
+		cbox.setTitle("Chat with " + name);
+		return cbox;
+	}
+	
 	public static void main(String[] args) {
+		cbox = new ChatBox();
+		cbox.setVisible(true);
+//		cbox.setTitle("Chat with ");
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
@@ -73,6 +101,7 @@ public class main {
     	            		
     	            		//tao cua so thong bao
     	            		ChatInform ci = new ChatInform(nameA,ipAStr,nameB);
+//    	            		ChatRequestInform ci = new ChatRequestInform(nameA,ipAStr,nameB);
     	            		ci.setVisible(true);
     	            		ci.setTitle("Chat request from " + nameA + " with ip: " + ipAStr);
     	            		
@@ -101,6 +130,7 @@ public class main {
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize() {
+		System.out.println("ThisL: " + this);
 		frame = new JFrame("My Chat App");
 		frame.setBounds(100, 100, 400, 300);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -203,7 +233,7 @@ public class main {
 					}
 					
 					//Mo cua so OnlineList
-					OnlineList ol = new OnlineList(inputName, names);
+					OnlineList ol = new OnlineList(inputName, names, cloneObj);
 					ol.setVisible(true);
 					ol.setTitle("Online List");
 					
