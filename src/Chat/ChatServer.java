@@ -144,13 +144,33 @@ public class ChatServer {
 	            	if (splited[2].equals("OK")) {//chap nhan
 	            		String ipAStr = splited[5];
 	            		String ipBStr = splited[3];
+	            		int fpB = 9002; 
+	            		int fpA = 9003;
 	            		//gui thong bao cho A
 	            		//Tao ket noi den A
 	            		try {
 	            			InetAddress ipA = InetAddress.getByName(ipAStr);
 	            			String nameB = splited[4];
-	            			String portB = "9003";
-	            			String portA = "9002";
+	            			String nameA = splited[6];
+//	            			String portB = "9003";
+//	            			String portA = "9002";
+	            			
+	            			for (ChatClient cc:clientList) {
+	            				if (cc.getName().equals(nameB)) {
+	            					fpB = cc.freePort();
+	            					break;
+	            				}
+	            			}
+	            			String portB = Integer.toString(fpB);
+	            			
+	            			for (ChatClient cc:clientList) {
+	            				if (cc.getName().equals(nameA)) {
+	            					fpA = cc.freePort();
+	            					break;
+	            				}
+	            			}
+	            			String portA = Integer.toString(fpA);
+	            			
 	    					Socket socket = new Socket(ipA, 9005);
 	    					OutputStream os = socket.getOutputStream();
 							OutputStreamWriter osw = new OutputStreamWriter(os);
@@ -174,9 +194,16 @@ public class ChatServer {
 	            		//Tao ket noi den B
 	            		try {
 	            			InetAddress ipB = InetAddress.getByName(ipBStr);
+	            			String nameB = splited[4];
 	            			String nameA = splited[6];
-	            			String portA = "9002";
-	            			String portB = "9003";
+//	            			String portA = "9002";
+//	            			String portB = "9003";
+	            			
+	            			//dao nguoc lai
+	            			
+	            			String portA = Integer.toString(fpB);
+	            			String portB = Integer.toString(fpA);
+	            			
 	    					Socket socket = new Socket(ipB, 9006);
 	    					OutputStream os = socket.getOutputStream();
 							OutputStreamWriter osw = new OutputStreamWriter(os);

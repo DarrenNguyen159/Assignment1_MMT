@@ -110,7 +110,7 @@ public class OnlineList extends JFrame {
 					OutputStream os = socket.getOutputStream();
                 	OutputStreamWriter osw = new OutputStreamWriter(os);
                 	BufferedWriter bw = new BufferedWriter(osw);
-                	
+                	System.out.println("DEBUG: " + selectedNameB);
                 	bw.write("REQ CHAT ");
                 	//ten cua client muon chat(B)
                 	bw.write(selectedNameB + " ");

@@ -31,6 +31,7 @@ public class ChatClient {
 		for (int i = 0; i < 3; i++) {
 			if (Ports[i] == false) {
 				freePort = 9002 + i;
+				Ports[i] = true;
 			}
 		}
 		return freePort;
