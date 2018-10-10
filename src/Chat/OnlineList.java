@@ -103,7 +103,7 @@ public class OnlineList extends JFrame {
 					ip = InetAddress.getByAddress(ipAddr);
 					
 					//Ket noi den ChatServer
-					InetAddress address = InetAddress.getByName("127.0.0.1");
+					InetAddress address = InetAddress.getByName(main.svip);
 					Socket socket = new Socket(address, port);
 					OutputStream os = socket.getOutputStream();
                 	OutputStreamWriter osw = new OutputStreamWriter(os);

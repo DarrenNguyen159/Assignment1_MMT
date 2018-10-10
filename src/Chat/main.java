@@ -34,6 +34,9 @@ public class main {
 	private JTable table;
 	public static ChatBox cbox;
 	public main cloneObj = this;
+	private JLabel lblServerIp;
+	private JTextField serveripBox;
+	public static String svip = "";
 		
 	/**
 	 * Launch the application.
@@ -199,7 +202,7 @@ public class main {
 						//byte[] ipAdr = new byte[] {(byte) 192, (byte) 168,(byte) 1,(byte) 58};
 						//InetAddress address = InetAddress.getByAddress(ipAdr);
 						//Ket noi den ChatServer
-						InetAddress address = InetAddress.getByName("127.0.0.1");
+						InetAddress address = InetAddress.getByName(svip);
 						Socket socket = new Socket(address, port);
 						
 						//get client ip address
@@ -250,6 +253,23 @@ public class main {
 		gbc_btnConnect.gridy = 1;
 		frame.getContentPane().add(btnConnect, gbc_btnConnect);
 		
+		lblServerIp = new JLabel("Server IP");
+		GridBagConstraints gbc_lblServerIp = new GridBagConstraints();
+		gbc_lblServerIp.anchor = GridBagConstraints.EAST;
+		gbc_lblServerIp.insets = new Insets(0, 0, 5, 5);
+		gbc_lblServerIp.gridx = 0;
+		gbc_lblServerIp.gridy = 2;
+		frame.getContentPane().add(lblServerIp, gbc_lblServerIp);
+		
+		serveripBox = new JTextField();
+		GridBagConstraints gbc_serveripBox = new GridBagConstraints();
+		gbc_serveripBox.insets = new Insets(0, 0, 5, 0);
+		gbc_serveripBox.fill = GridBagConstraints.HORIZONTAL;
+		gbc_serveripBox.gridx = 1;
+		gbc_serveripBox.gridy = 2;
+		frame.getContentPane().add(serveripBox, gbc_serveripBox);
+		serveripBox.setColumns(10);
+		svip = serveripBox.getText();
 	}
 
 	

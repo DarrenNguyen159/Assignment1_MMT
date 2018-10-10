@@ -90,7 +90,7 @@ public class ChatInform extends JFrame {
 					
 					
 					//Ket noi den ChatServer
-					InetAddress address = InetAddress.getByName("127.0.0.1");
+					InetAddress address = InetAddress.getByName(main.svip);
 					Socket socket = new Socket(address, 9000);
 					OutputStream os = socket.getOutputStream();
                 	OutputStreamWriter osw = new OutputStreamWriter(os);
