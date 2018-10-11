@@ -233,6 +233,22 @@ public class Client {
             e.printStackTrace();
         }
     }
+    
+    public void sendClose() {
+        if (null == clientSoc) {
+            return;
+        }
+        try {
+            OutputStream os = clientSoc.getOutputStream();
+            OutputStreamWriter osw = new OutputStreamWriter(os);
+            BufferedWriter bw = new BufferedWriter(osw);
+            bw.write("CHAT CLOSE");
+            bw.write("\n");
+            bw.flush();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
     public class ListenServerTask implements Runnable {
         public void run() {
@@ -298,8 +314,13 @@ public class Client {
 //                        System.out.println("ChatServer sent: ");
                         String line = br.readLine();
                         System.out.println(line + "\n");
-//                        String[] splited = line.split(" ");
-
+                        String[] splited = line.split(" ");
+                        
+                        if (splited[1].equals("CLOSE")) {
+                            //dong cua so
+                            cbox.setVisible(false);
+                        }
+                        
                         synchronized (cbox.chatflow) {
                             String currentText = cbox.chatflow.getText();
                             String newText = currentText + "\n";

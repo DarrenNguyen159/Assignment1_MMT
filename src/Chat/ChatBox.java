@@ -108,20 +108,27 @@ public class ChatBox extends JFrame {
             public void actionPerformed(ActionEvent arg0) {
                 // ket thuc chat
                 try {
-                    // ket noi den user kia
-                    socket = new Socket(ip, 9005);
-                    OutputStream os = socket.getOutputStream();
-                    OutputStreamWriter osw = new OutputStreamWriter(os);
-                    BufferedWriter bw = new BufferedWriter(osw);
+                    //goi ham ket thuc chat
+                    if (null == socket) {
+                        socket = new Socket(ip, 9005);
+                    }
 
-                    bw.write("CHAT CLOSE");
-                    bw.write("\n");
-                    bw.flush();
+//                    String message = sendText.getText();
+                    if (null != client) {
+//                        client.sendMess(message);
+                        client.sendClose();
+                    }
 
-                    // dong cua so
-                    closeChatBox(cloneObj);
-                } catch (IOException e) {
-                    e.printStackTrace();
+                    // hien thi tin nhan vua go
+                    synchronized (chatflow) {
+                        String currentText = chatflow.getText();
+                        String newText = currentText + "\n";
+                        newText += "The other user has left";
+                        chatflow.setText(newText);
+                    }
+
+                } catch (Exception ex) {
+
                 }
             }
         });
