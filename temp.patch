@@ -1,0 +1,317 @@
+diff --git a/src/Chat/ChatBox.java b/src/Chat/ChatBox.java
+index 81a6be9..a653db7 100644
+--- a/src/Chat/ChatBox.java
++++ b/src/Chat/ChatBox.java
+@@ -86,7 +86,9 @@ public class ChatBox extends JFrame {
+ 				//gui cho user kia tin nhan
+ 				try {
+ 					//ket noi den user kia
+-					socket = new Socket(ip, Integer.parseInt(portKia));
++					if (null == socket) {
++						socket = new Socket(ip, 9005);
++					}
+ 					OutputStream os = socket.getOutputStream();
+                 	OutputStreamWriter osw = new OutputStreamWriter(os);
+                 	BufferedWriter bw = new BufferedWriter(osw);
+diff --git a/src/Chat/ChatInform.java b/src/Chat/ChatInform.java
+index 96c5328..a2caabe 100644
+--- a/src/Chat/ChatInform.java
++++ b/src/Chat/ChatInform.java
+@@ -46,7 +46,7 @@ public class ChatInform extends JFrame {
+ 	/**
+ 	 * Create the frame.
+ 	 */
+-	public ChatInform(String UsernameA, String ipAStr, String UsernameB) {
++	public ChatInform(String UsernameA, String ipAStr) {
+ 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+ 		setBounds(100, 100, 265, 205);
+ 		contentPane = new JPanel();
+@@ -88,76 +88,76 @@ public class ChatInform extends JFrame {
+ 				//gui cho server chap nhan yeu cau chat
+ 				try {
+ 					
+-					
+-					//Ket noi den ChatServer
+-					InetAddress address = InetAddress.getByName(main.svip);
+-					Socket socket = new Socket(address, 9000);
+-					OutputStream os = socket.getOutputStream();
+-                	OutputStreamWriter osw = new OutputStreamWriter(os);
+-                	BufferedWriter bw = new BufferedWriter(osw);
+-                	
+-                	bw.write("RES CHAT OK ");
+-                	//ip cua client gui yeu cau(A)
+-                	String ipBStr = InetAddress.getLocalHost().getHostAddress();
+-                	bw.write(ipBStr);
+-                	bw.write(" ");
+-                	bw.write(UsernameB);
+-                	bw.write(" ");
+-                	bw.write(ipAStr);
+-                	bw.write(" ");
+-                	bw.write(UsernameA);
+-                	bw.write("\n");
+-                	bw.flush();
++//					
++//					//Ket noi den ChatServer
++//					InetAddress address = InetAddress.getByName(main.svip);
++//					Socket socket = new Socket(address, 9000);
++//					OutputStream os = socket.getOutputStream();
++//                	OutputStreamWriter osw = new OutputStreamWriter(os);
++//                	BufferedWriter bw = new BufferedWriter(osw);
++//                	
++//                	bw.write("RES CHAT OK ");
++//                	//ip cua client gui yeu cau(A)
++//                	String ipBStr = InetAddress.getLocalHost().getHostAddress();
++////                	bw.write(ipBStr);
++////                	bw.write(" ");
++//                	bw.write(UsernameB);
++//                	bw.write(" ");
++//                	bw.write(ipAStr);
++//                	bw.write(" ");
++//                	bw.write(UsernameA);
++//                	bw.write("\n");
++//                	bw.flush();
+ 		            
+                 	//nhan thong bao tu ChatServer
+-                	ServerSocket serverSocket = new ServerSocket(9006);
+-                	System.out.println("Waiting on port 9006\n");
+-                	Socket socketListener = null;
+-                    while (true) {
+-                    	try {
+-                    		socketListener = serverSocket.accept();
+-                    		InputStream is = socketListener.getInputStream();
+-            	            InputStreamReader isr = new InputStreamReader(is);
+-            	            BufferedReader br = new BufferedReader(isr);
+-            	            
+-            	            System.out.println("ChatServer sent: ");
+-            	            String line = br.readLine();
+-            	            System.out.println(line + "\n");
+-            	            String[] splited = line.split(" ");
+-            	            if (splited[0].equals("INFORM")) {
+-            	            	if (splited[1].equals("RES")) {
+-            	            		if (splited[3].equals("OK")) {
+-            	            			//System.out.println("Received " + splited[4]);
+-            	            			//tao cua so chat
+-            	            			String userKiaName = splited[5];
+-            	            			String ipKia = splited[4];
+-            	            			String portKia = splited[6];
+-            	            			String portNay = splited[7];
+-//            	            			ChatBox cb = new ChatBox(userKiaName, ipKia);
+-//            	            			cb.setVisible(true);
+-//            	            			cb.setTitle("Chat with " + userKiaName);
+-            	            			
++//                	ServerSocket serverSocket = new ServerSocket(9006);
++//                	System.out.println("Waiting on port 9006\n");
++//                	Socket socketListener = null;
++//                    while (true) {
++//                    	try {
++//                    		socketListener = serverSocket.accept();
++//                    		InputStream is = socketListener.getInputStream();
++//            	            InputStreamReader isr = new InputStreamReader(is);
++//            	            BufferedReader br = new BufferedReader(isr);
++//            	            
++//            	            System.out.println("ChatServer sent: ");
++//            	            String line = br.readLine();
++//            	            System.out.println(line + "\n");
++//            	            String[] splited = line.split(" ");
++//            	            if (splited[0].equals("INFORM")) {
++//            	            	if (splited[1].equals("RES")) {
++//            	            		if (splited[3].equals("OK")) {
++//            	            			//System.out.println("Received " + splited[4]);
++//            	            			//tao cua so chat
++//            	            			String userKiaName = splited[5];
++//            	            			String ipKia = splited[4];
++//            	            			String portKia = splited[6];
++//            	            			String portNay = splited[7];
++////            	            			ChatBox cb = new ChatBox(userKiaName, ipKia);
++////            	            			cb.setVisible(true);
++////            	            			cb.setTitle("Chat with " + userKiaName);
++//            	            			
+             	            			main.cbox.setVisible(true);
+-            	            			main.cbox.name = userKiaName;
++            	            			main.cbox.name = UsernameA;
+             	            			main.cbox.setTitle("Chat with " + main.cbox.name);
+-            	            			main.cbox.ip = ipKia;
+-            	            			main.cbox.portKia = portKia;
+-            	            			main.cbox.portNay = portNay;
+-            	            			main.cbox.WaitChat();
+-            	            			
+-            	            			//dong ket noi voi Server
+-            	            			serverSocket.close();
+-            	            			break;
+-            	            		}
+-            	            		
+-            	            	}
+-            	            }
+-            	            
+-                    	}
+-                    	catch (Exception ex) {
+-                    		
+-                    	}
+-                    }
++            	            			main.cbox.ip = ipAStr;
++//            	            			main.cbox.portKia = portKia;
++//            	            			main.cbox.portNay = portNay;
++//            	            			main.cbox.WaitChat();
++//            	            			
++//            	            			//dong ket noi voi Server
++//            	            			serverSocket.close();
++//            	            			break;
++//            	            		}
++//            	            		
++//            	            	}
++//            	            }
++//            	            
++//                    	}
++//                    	catch (Exception ex) {
++//                    		
++//                    	}
++//                    }
+                 	
+                 	
+ 					
+diff --git a/src/Chat/ChatServer.java b/src/Chat/ChatServer.java
+index 8b0ec9c..0dc307c 100644
+--- a/src/Chat/ChatServer.java
++++ b/src/Chat/ChatServer.java
+@@ -41,14 +41,15 @@ public class ChatServer {
+ 	            
+ 	            String[] splited = line.split(" ");	            
+ 	            
++	            String reqIp = socket.getInetAddress().toString().substring(1);
+ 	            
+ 	            //Nhan yeu cau gia nhap chat server
+ 	            if (splited[0].equals("REQ")) {
+ 	            	if (splited[1].equals("JOIN")) {
+-	            		System.out.println("This is a access request from user " + splited[3] + " with ip: " + splited[2]);
+-		            	String name = splited[3];
+-		            	String IP = splited[2];
+-		            	InetAddress ipAdrr = InetAddress.getByName(IP);
++	            		System.out.println("This is a access request from user " + splited[2] + " with ip: " + socket.getInetAddress().toString());
++		            	String name = splited[2];
++//		            	String IP = socket.getInetAddress().toString().substring(1);// splited[2];
++		            	InetAddress ipAdrr = InetAddress.getByName(reqIp);
+ 		            	
+ 		            	//kiem tra xem co trung ten ko?
+ 		            	boolean ok = true;
+@@ -94,11 +95,11 @@ public class ChatServer {
+ 	            //Nhan yeu cau muon chat
+ 	            if (splited[0].equals("REQ")) {
+ 	            	if (splited[1].equals("CHAT")) {
+-	            		System.out.println("User " + splited[4] + " with ip " + splited[3] + " wanna chat with user: " + splited[2]);
++//	            		System.out.println("User " + splited[4] + " with ip " + splited[3] + " wanna chat with user: " + splited[2]);
+ 	            		//Thong bao cho B yeu cau chat cua A
+-	            		String ipAStr = splited[3];
++//	            		String ipAStr = splited[3]; //
+ 	            		String name = splited[2];
+-	            		String othername = splited[4];
++	            		String othername = splited[3];
+ 	            		InetAddress ipb = null;
+ 	            		//tim name trong ClientList
+ 	            		for (ChatClient cc : ChatServer.clientList) {
+@@ -125,14 +126,14 @@ public class ChatServer {
+ 							OutputStreamWriter osw = new OutputStreamWriter(os);
+ 							BufferedWriter bw = new BufferedWriter(osw);
+ 							bw.write("INFORM REQ CHAT ");
+-							bw.write(ipAStr);
++							bw.write(reqIp);
+ 							bw.write(" ");
+ 							bw.write(othername);
+ 							bw.write("\n");
+ 							bw.flush();
+ 	            		}
+ 	            		catch (Exception ex) {
+-	            			
++	            			ex.printStackTrace();
+ 	            		}
+ 	            		
+ 	            	}
+@@ -142,7 +143,7 @@ public class ChatServer {
+ 	            //nhan tra loi chap nhan chat
+ 	            if (splited[0].equals("RES")) {
+ 	            	if (splited[2].equals("OK")) {//chap nhan
+-	            		String ipAStr = splited[5];
++	            		String ipAStr = splited[4];
+ 	            		String ipBStr = splited[3];
+ 	            		int fpB = 9002; 
+ 	            		int fpA = 9003;
+@@ -187,7 +188,7 @@ public class ChatServer {
+ 							bw.flush();
+ 	            		}
+ 	            		catch (Exception ex) {
+-	            			
++	            			ex.printStackTrace();
+ 	            		}
+ 	            		
+ 	            		//gui thong bao cho B
+@@ -220,7 +221,7 @@ public class ChatServer {
+ 							bw.flush();
+ 	            		}
+ 	            		catch (Exception ex) {
+-	            			
++	            			ex.printStackTrace();
+ 	            		}
+ 	            	}
+ 	            }
+diff --git a/src/Chat/OnlineList.java b/src/Chat/OnlineList.java
+index 6fe8ac1..9b1c3c6 100644
+--- a/src/Chat/OnlineList.java
++++ b/src/Chat/OnlineList.java
+@@ -115,8 +115,8 @@ public class OnlineList extends JFrame {
+                 	//ten cua client muon chat(B)
+                 	bw.write(selectedNameB + " ");
+                 	//ip cua may A
+-                	bw.write(ip.getHostAddress());
+-                	bw.write(" ");
++//                	bw.write(ip.getHostAddress());
++//                	bw.write(" ");
+                 	bw.write(name);
+                 	bw.write("\n");
+                 	bw.flush();
+diff --git a/src/Chat/main.java b/src/Chat/main.java
+index f7e040f..4bc1759 100644
+--- a/src/Chat/main.java
++++ b/src/Chat/main.java
+@@ -100,11 +100,11 @@ public class main {
+     	            	if (splited[1].equals("REQ")) {
+     	            		String ipAStr = splited[3];
+     	            		String nameA = splited[4];
+-    	            		String nameB = userNameBox.getText();
++//    	            		String nameB = userNameBox.getText();
+     	            		
+     	            		//tao cua so thong bao
+     	            		System.out.println("DEBUG: " + userNameBox.getText());
+-    	            		ChatInform ci = new ChatInform(nameA,ipAStr,nameB);
++    	            		ChatInform ci = new ChatInform(nameA,ipAStr);
+ //    	            		ChatRequestInform ci = new ChatRequestInform(nameA,ipAStr,nameB);
+     	            		ci.setVisible(true);
+     	            		ci.setTitle("Chat request from " + nameA + " with ip: " + ipAStr);
+@@ -202,18 +202,15 @@ public class main {
+ 						//byte[] ipAdr = new byte[] {(byte) 192, (byte) 168,(byte) 1,(byte) 58};
+ 						//InetAddress address = InetAddress.getByAddress(ipAdr);
+ 						//Ket noi den ChatServer
++						svip = serveripBox.getText();
+ 						InetAddress address = InetAddress.getByName(svip);
+ 						Socket socket = new Socket(address, port);
+ 						
+-						//get client ip address
+-						String clientIP = InetAddress.getLocalHost().getHostAddress();
+-						
+ 	            		System.out.println("Client wanna connect to Server: " + socket.getRemoteSocketAddress());
+ 						OutputStream os = socket.getOutputStream();
+ 	                	OutputStreamWriter osw = new OutputStreamWriter(os);
+ 	                	BufferedWriter bw = new BufferedWriter(osw);
+ 	                	bw.write("REQ JOIN ");
+-	                	bw.write(clientIP + " ");
+ 	                	bw.write(userNameBox.getText() + "\n");
+ 		                bw.flush();
+ 		                
+@@ -246,7 +243,8 @@ public class main {
+ 			            
+ 					}
+ 					catch (Exception ex){
+-						
++						ex.printStackTrace();
++
+ 					}
+ 					
+ 					
